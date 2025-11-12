@@ -1,0 +1,34 @@
+claims structure
+
+{
+  "id": 1,
+  "name": "Angel Renaud Delgado Gomez",
+  "email": "angel.delgado@tecsup.edu.pe",
+  "role": "student",
+  "iat": 1759027474,
+  "exp": 1759031074
+}
+
+
+
+
+model-migration creation
+
+npx sequelize-cli model:generate \
+  --name Role \
+  --attributes name:string \
+  --config db/config.js \
+  --models-path db/models \
+  --migrations-path db/migrations
+
+npx sequelize-cli model:generate \
+  --name User \
+  --attributes name:string,email:string,roleId:integer \
+  --config db/config.js \
+  --models-path db/models \
+  --migrations-path db/migrations
+
+
+
+INSERT INTO Users (name, email, password, roleId, createdAt, updatedAt)
+VALUES ('Administrador','admin@tecsup.edu.pe', 'admin123', (SELECT id FROM Roles WHERE name = 'admin'), NOW(), NOW());

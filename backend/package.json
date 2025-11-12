@@ -1,0 +1,40 @@
+{
+  "name": "tecsup_management_system",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "services/auth",
+    "services/cubicle-reservation",
+    "services/tool-loan",
+    "api-gateway",
+    "websocket-server",
+    "services/openai"
+  ],
+  "scripts": {
+    "start:auth": "cd services/auth && nodemon server.js",
+    "start:cubicles": "cd services/cubicle-reservation && nodemon server.js",
+    "start:loans": "cd services/tool-loan && nodemon server.js",
+    "start:openai": "cd services/openai && nodemon server.js",
+    "start:gateway": "cd api-gateway && nodemon server.js",
+    "start:ws": "cd websocket-server && nodemon server.js",
+    "start:all": "concurrently \"npm run start:auth\" \"npm run start:cubicles\" \"npm run start:loans\" \"npm run start:gateway\" \"npm run start:ws\" \"npm run start:openai\"",
+
+    "migrate:auth": "npm run migrate --workspace=services/auth",
+    "migrate:cubicles": "npm run migrate --workspace=services/cubicle-reservation",
+    "migrate:loans": "npm run migrate --workspace=services/tool-loan",
+    "migrate:all": "npm run migrate:auth && npm run migrate:cubicles && npm run migrate:loans",
+
+    "seed:auth": "npm run seed --workspace=services/auth",
+    "seed:cubicles": "npm run seed --workspace=services/cubicle-reservation",
+    "seed:loans": "npm run seed --workspace=services/tool-loan",
+    "seed:all": "npm run seed:auth && npm run seed:cubicles && npm run seed:loans"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "nodemon": "^3.1.10"
+  }
+}

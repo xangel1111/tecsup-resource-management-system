@@ -1,0 +1,78 @@
+npx sequelize-cli model:generate \
+  --name Cubicle  \
+  --attributes name:string,capacity:integer,location:string,status:string \
+  --config db/config.js \
+  --models-path db/models \
+  --migrations-path db/migrations
+
+
+npx sequelize-cli model:generate \
+  --name Reservation \
+  --attributes userId:integer,cubicleId:integer,startTime:date,endTime:date,status:string \
+  --config db/config.js \
+  --models-path db/models \
+  --migrations-path db/migrations
+
+
+make a reservation
+{
+  "cubicleId": 1,
+  "startTime": "2025-09-28T14:00:00.000Z",
+  "hoursReserved": 2
+}
+
+delete a reservation
+{
+    "reservationId": 1
+}
+
+cubicles response
+
+{
+    "cubicles": [
+        {
+            "id": 1,
+            "name": "Cubicle 1",
+            "capacity": 4,
+            "location": "Library",
+            "status": "available",
+            "createdAt": "2025-09-28T04:13:44.000Z",
+            "updatedAt": "2025-09-28T04:13:44.000Z"
+        },
+        {
+            "id": 2,
+            "name": "Cubicle 2",
+            "capacity": 4,
+            "location": "Library",
+            "status": "available",
+            "createdAt": "2025-09-28T04:13:44.000Z",
+            "updatedAt": "2025-09-28T04:13:44.000Z"
+        },
+        {
+            "id": 3,
+            "name": "Cubicle 3",
+            "capacity": 4,
+            "location": "Library",
+            "status": "available",
+            "createdAt": "2025-09-28T04:13:44.000Z",
+            "updatedAt": "2025-09-28T04:13:44.000Z"
+        },
+        {
+            "id": 4,
+            "name": "Cubicle 4",
+            "capacity": 4,
+            "location": "Library",
+            "status": "available",
+            "createdAt": "2025-09-28T04:13:44.000Z",
+            "updatedAt": "2025-09-28T04:13:44.000Z"
+        }
+    ],
+    "user": {
+        "id": 1,
+        "name": "Angel Renaud Delgado Gomez",
+        "email": "angel.delgado@tecsup.edu.pe",
+        "role": "student",
+        "iat": 1759032536,
+        "exp": 1759036136
+    }
+}

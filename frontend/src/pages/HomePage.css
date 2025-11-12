@@ -1,0 +1,132 @@
+/* --- Configuración General --- */
+body, html, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f4f7f6; /* Fondo gris claro de la página */
+}
+
+.dashboard-page {
+  min-height: 100vh;
+}
+
+/* --- Header / Barra de Navegación --- */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2.5rem;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  height: 70px; /* Altura fija para el header */
+}
+
+.header-logo {
+  height: 40px; /* Ajusta la altura del logo */
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem; /* Espacio entre los links y el botón */
+}
+
+.header-nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: color 0.2s;
+}
+
+.header-nav a:hover {
+  color: #00AEEF; /* Azul Tecsup al pasar el mouse */
+}
+
+.logout-btn {
+  padding: 0.5rem 1rem;
+  background-color: #f0f0f0; /* Botón gris claro */
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.logout-btn:hover {
+  background-color: #e0e0e0;
+}
+
+/* --- Contenido Principal --- */
+.dashboard-content {
+  padding: 2.5rem; /* Espacio alrededor del contenedor de tarjetas */
+}
+
+.card-container {
+  display: flex;
+  justify-content: center;
+  gap: 2rem; /* Espacio entre las tarjetas */
+  flex-wrap: wrap; /* Para que se ajusten en pantallas pequeñas */
+  max-width: 1100px;
+  margin: 0 auto; /* Centra el contenedor de tarjetas */
+}
+
+/* --- Estilo de Tarjeta de Servicio --- */
+.service-card {
+  width: 450px; /* Ancho de cada tarjeta */
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden; /* Para que la imagen respete los bordes redondeados */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-5px); /* Efecto de "levantar" al pasar el mouse */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.card-image {
+  width: 100%;
+  height: 250px; /* Altura fija para la imagen */
+  object-fit: cover; /* Asegura que la imagen cubra el espacio sin deformarse */
+}
+
+.card-content {
+  padding: 1.5rem;
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
+.card-description {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+  min-height: 50px; /* Da una altura mínima para alinear tarjetas con texto de 1 o 2 líneas */
+}
+
+.card-button {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: #00AEEF; /* Azul Tecsup */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.card-button:hover {
+  background-color: #0099D4; /* Azul un poco más oscuro */
+}

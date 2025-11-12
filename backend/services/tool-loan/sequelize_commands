@@ -1,0 +1,3 @@
+npx sequelize-cli model:generate --name Equipment --attributes name:string,description:text,quantity:integer,status:string
+
+npx sequelize-cli model:generate --name Loan --attributes equipmentId:integer,userId:integer,startDate:date,endDate:date,status:string

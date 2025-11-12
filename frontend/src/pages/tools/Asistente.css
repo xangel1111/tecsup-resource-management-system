@@ -1,0 +1,162 @@
+/* --- Contenedor Principal del Chat --- */
+.ai-assistant-chat {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 250px); /* Ajusta la altura según tus necesidades (ej. 100vh - altura_navbar - altura_tabs) */
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  overflow: hidden; /* Para que el scroll del chat funcione bien */
+}
+
+/* --- Área de Mensajes --- */
+.chat-messages {
+  flex-grow: 1; /* Ocupa todo el espacio disponible */
+  padding: 1rem;
+  overflow-y: auto; /* Habilita el scroll si hay muchos mensajes */
+  background-color: #eef2f6;
+  border-bottom: 1px solid #ddd;
+}
+
+.chat-message {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  max-width: 85%; /* Limita el ancho del mensaje */
+}
+
+.chat-message.user {
+  justify-content: flex-end; /* Mensajes de usuario a la derecha */
+  margin-left: auto; /* Empuja el mensaje a la derecha */
+}
+
+.chat-message.ai {
+  justify-content: flex-start; /* Mensajes de IA a la izquierda */
+  margin-right: auto; /* Empuja el mensaje a la izquierda */
+}
+
+.message-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #00AEEF; /* Color para los íconos */
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9rem;
+  flex-shrink: 0; /* Evita que el ícono se encoja */
+}
+
+.chat-message.user .message-icon {
+  background-color: #667eea; /* Color diferente para usuario */
+  margin-left: 0.5rem;
+  order: 2; /* Pone el ícono del usuario a la derecha del bubble */
+}
+.chat-message.ai .message-icon {
+  margin-right: 0.5rem;
+  order: 1; /* Pone el ícono de la IA a la izquierda del bubble */
+}
+
+
+.message-bubble {
+  padding: 0.75rem 1rem;
+  border-radius: 18px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  word-wrap: break-word; /* Asegura que palabras largas no rompan el layout */
+}
+
+.chat-message.user .message-bubble {
+  background-color: #667eea;
+  color: white;
+  border-bottom-right-radius: 4px; /* Pequeño ajuste visual */
+}
+
+.chat-message.ai .message-bubble {
+  background-color: #ffffff;
+  color: #333;
+  border: 1px solid #e0e0e0;
+  border-bottom-left-radius: 4px; /* Pequeño ajuste visual */
+}
+
+/* Estilo para las negritas dentro del mensaje (interpretación simple de Markdown) */
+.message-bubble strong {
+  font-weight: 700;
+  color: #00AEEF; /* Un color distintivo para las herramientas */
+}
+.chat-message.user .message-bubble strong {
+  color: #fff; /* Que se vea bien en burbuja de usuario */
+}
+
+
+/* --- Input del Chat --- */
+.chat-input-form {
+  display: flex;
+  padding: 1rem;
+  background-color: #ffffff;
+  border-top: 1px solid #e0e0e0;
+}
+
+.chat-input {
+  flex-grow: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 25px; /* Más redondo */
+  font-size: 1rem;
+  margin-right: 0.75rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.chat-input:focus {
+  border-color: #00AEEF;
+  box-shadow: 0 0 0 2px rgba(0, 174, 239, 0.2);
+}
+
+.send-button {
+  background-color: #00AEEF;
+  color: white;
+  border: none;
+  border-radius: 25px; /* Más redondo */
+  width: 45px;
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.send-button:hover {
+  background-color: #008fbc;
+}
+
+/* (Añadir a Asistente.css) */
+.message-bubble.typing-indicator span {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #999;
+  margin: 0 2px;
+  animation: bounce 1.4s infinite both;
+}
+
+.message-bubble.typing-indicator span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.message-bubble.typing-indicator span:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1.0);
+  }
+}

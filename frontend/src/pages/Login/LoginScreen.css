@@ -1,0 +1,125 @@
+/* --- Configuración General --- */
+body, html, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+/* --- Contenedor de Página Completa --- */
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f0f2f5; /* Gris claro de fondo */
+}
+
+/* --- Tarjeta Principal de Login --- */
+.login-container {
+  display: flex;
+  width: 960px; /* Ancho total de la tarjeta */
+  height: 600px; /* Alto total de la tarjeta */
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  overflow: hidden; /* Para que la imagen no se salga de los bordes redondeados */
+}
+
+/* --- Columna Izquierda (Formulario) --- */
+.login-form-wrapper {
+  flex: 1; /* Ocupa la mitad del espacio */
+  padding: 4rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form-wrapper h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 2rem 0;
+}
+
+.input-group {
+  margin-bottom: 1.5rem;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #555;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+/* --- Contenedor de Botones --- */
+.button-container {
+  display: flex;
+  gap: 1rem; /* Espacio entre botones */
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* Botón de Google */
+.google-btn {
+  padding: 0.75rem;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.google-btn:hover {
+  background-color: #f9f9f9;
+}
+
+/* Botón de Siguiente */
+.submit-btn {
+  flex-grow: 1; /* Ocupa el espacio restante */
+  padding: 0.75rem 1rem;
+  background-color: #00AEEF; /* Azul similar al de la imagen */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submit-btn:hover {
+  background-color: #0099D4;
+}
+
+/* --- Logo de Tecsup al final --- */
+.tecsup-logo {
+  width: 150px;
+  margin-top: auto; /* Empuja el logo al final de la columna */
+  align-self: flex-start;
+}
+
+/* --- Columna Derecha (Imagen) --- */
+.login-image-wrapper {
+  flex: 1; /* Ocupa la otra mitad del espacio */
+  background-image: url('https://www.tecsup.edu.pe/wp-content/uploads/2024/03/MG_7248-1.jpg'); /* REEMPLAZA ESTA URL */
+  background-size: cover;
+  background-position: center;
+}
