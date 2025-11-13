@@ -16,6 +16,11 @@ const loansApi = {
     return response.data;
   },
 
+  getNotPendingLoans: async () => {
+    const response = await axiosClient.get('/loans/loans/notpending');
+    return response.data;
+  },
+
   getHistoryLoans: async () => {
     const response = await axiosClient.get('/loans/loans/notpending');
     return response.data;

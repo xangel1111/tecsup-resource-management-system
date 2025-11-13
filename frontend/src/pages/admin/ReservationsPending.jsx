@@ -1,30 +1,22 @@
 import './AdminLayout.css'; // Reutiliza la misma hoja de estilos
 
-// --- DATOS DE EJEMPLO ---
-const pendingBookings = [
-  { id: 1, fecha: '2025/10/05 10:57:46', cubiculo: 3, alumno: 'angel.delgado@tecsup.edu.pe', duracion: '2h' },
-  { id: 2, fecha: '2025/10/02 10:57:46', cubiculo: 2, alumno: 'fernando.aquino@tecsup.edu.pe', duracion: '1h' },
-  { id: 3, fecha: '2025/10/01 10:57:46', cubiculo: 4, alumno: 'fernando.aquino@tecsup.edu.pe', duracion: '2h' },
-  { id: 4, fecha: '2025/10/01 09:30:00', cubiculo: 'angel.delgado@tecsup.edu.pe', alumno: 'Alumno 2', duracion: '3h' },
-];
-// --- FIN DE DATOS DE EJEMPLO ---
-
 import { useEffect, useState } from "react";
 import cubiclesApi from "../../api/cubiclesApi";
 import usersApi from "../../api/usersApi";
 
-const ReservasPendientes = () => {
+const ReservasPendientes = ({ getAllNotPending }) => {
   const [activeFilter, setActiveFilter] = useState("TODOS");
   const [pendingBookings, setPendingBookings] = useState([]);
   const [users, setUsers] = useState([]);
 
   // Filtros (puedes cambiarlos por tus nombres de cubículos reales)
-  const filters = ["TODOS", "Biblioteca", "Lab. Redes", "Lab. A", "Lab. B"];
+  const filters = ["TODOS"];
 
   // 🔹 Obtener reservas pendientes desde la API
   const getPendingBookings = async () => {
     try {
       const data = await cubiclesApi.getAllPending();
+      console.log(data);
       setPendingBookings(data);
     } catch (error) {
       console.error("Error al obtener reservas pendientes:", error);
@@ -44,6 +36,7 @@ const ReservasPendientes = () => {
   const acceptReservation = async (id) => {
     try {
       const data = await cubiclesApi.acceptReservation(id);
+      await getAllNotPending();
       await getPendingBookings();
     } catch (error) {
       console.error("Error al aceptr rerer:", error);
@@ -59,9 +52,15 @@ const ReservasPendientes = () => {
   // 🔹 Unir reservas + usuarios
   const combinedBookings = pendingBookings.map((booking) => {
     const user = users.find((u) => u.id === booking.userId);
+
+    const fechaObj = new Date(booking.startTime);
+    const fecha = fechaObj.toLocaleDateString();
+    const hora = fechaObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
     return {
       id: booking.id,
-      fecha: new Date(booking.startTime).toLocaleDateString(),
+      fecha,
+      hora,
       cubiculo: booking.Cubicle?.name || `Cubículo ${booking.cubicleId}`,
       alumno: user ? user.email : "Desconocido",
       duracion: calcularDuracion(booking.startTime, booking.endTime),
@@ -100,6 +99,7 @@ const ReservasPendientes = () => {
           <thead>
             <tr>
               <th>Fecha</th>
+              <th>Hora Inicio</th>
               <th>Cubículo</th>
               <th>Alumno (Email)</th>
               <th>Duración</th>
@@ -110,12 +110,15 @@ const ReservasPendientes = () => {
             {filteredBookings.map((booking) => (
               <tr key={booking.id}>
                 <td>{booking.fecha}</td>
+                <td>{booking.hora}</td>
                 <td>{booking.cubiculo}</td>
                 <td>{booking.alumno}</td>
                 <td>{booking.duracion}</td>
                 <td>
-                  <a href="#" className="action-link-ingreso"
-                  onClick={() => acceptReservation(booking.id)}
+                  <a
+                    href="#"
+                    className="action-link-ingreso"
+                    onClick={() => acceptReservation(booking.id)}
                   >
                     Registrar Ingreso
                   </a>

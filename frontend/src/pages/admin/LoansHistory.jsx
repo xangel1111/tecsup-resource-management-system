@@ -3,23 +3,6 @@ import loansApi from '../../api/loansApi';
 import usersApi from '../../api/usersApi';
 import './AdminLayout.css';
 import { FaSearch } from 'react-icons/fa';
-// --- DATOS DE EJEMPLO ---
-const loanHistory = [
-  { id: 1, fecha: '2025/10/04', herramienta: 'Crimpadora', alumno: 'Alumno 3', estado: 'Devuelto' },
-  { id: 2, fecha: '2025/10/03', herramienta: 'Switch', alumno: 'Alumno 4', estado: 'Devuelto' },
-  { id: 3, fecha: '2025/10/02', herramienta: 'Multímetro', alumno: 'Alumno 5', estado: 'Con Retraso' },
-  { id: 4, fecha: '2025/10/01', herramienta: 'Set Destornilladores', alumno: 'Alumno 1', estado: 'Devuelto' },
-];
-// --- FIN DE DATOS DE EJEMPLO ---
-
-// Componente para la etiqueta de estado
-const StatusTag = ({ estado }) => {
-  let className = 'status-tag';
-  if (estado === 'Devuelto') className += ' completed'; // Reutiliza 'completed'
-  if (estado === 'Con Retraso') className += ' no-show'; // Reutiliza 'no-show'
-  
-  return <span className={className}>{estado}</span>;
-};
 
 const HistorialPrestamos = () => {
   const [loans, setLoans] = useState([]);
@@ -28,14 +11,12 @@ const HistorialPrestamos = () => {
   // Obtener préstamos
   const getAllLoans = async () => {
     const data = await loansApi.getHistoryLoans();
-    console.log(data)
     setLoans(data);
   };
 
   // Obtener usuarios
   const getAllUsers = async () => {
     const data = await usersApi.getUsers();
-    console.log(data);
     setUsers(data);
   };
 
@@ -44,6 +25,22 @@ const HistorialPrestamos = () => {
     getAllLoans();
     getAllUsers();
   }, []);
+
+
+  if (loans.length === 0 || users.length === 0) {
+    return <p>Cargando historial...</p>;
+  }
+
+  const StatusTag = ({ estado = '' }) => {
+    const cleanEstado = estado.trim().toLowerCase();
+    let className = 'status-tag';
+    if (cleanEstado === 'devuelto' || cleanEstado === 'returned') className += ' completed';
+    if (cleanEstado === 'con retraso' || cleanEstado === 'overdue') className += ' no-show';
+    if (cleanEstado === 'prestado' || cleanEstado === 'loaned') className += ' loaned';
+    if (cleanEstado === 'cancelado' || cleanEstado === 'cancelled') className += ' cancelled';
+
+    return <span className={className}>{estado}</span>;
+  };
 
   // Unir los datos: loan + user.email
   const loanHistory = loans.map((loan) => {
@@ -87,8 +84,7 @@ const HistorialPrestamos = () => {
                 <td>{loan.herramienta}</td>
                 <td>{loan.alumno}</td>
                 <td>
-                  Prestamo Activo
-                  {/*<StatusTag estado={loan.estado} />*/}
+                  <StatusTag estado={loan.estado} />
                 </td>
               </tr>
             ))}

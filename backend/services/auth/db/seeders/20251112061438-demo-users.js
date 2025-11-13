@@ -1,41 +1,60 @@
 'use strict';
+// /seeders/XXXX-users.js
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    // Encripta la contraseña "admin" antes de insertar
-    const hashedPassword = 'admin';
+    const hashedPassword = 'admin'; // En producción, deberías hashear esto
+
+    // Primero, asegura que la columna 'carrera' exista
+    // Puedes correr esto en una migración separada o aquí para asegurarte
+    try {
+      await queryInterface.addColumn('Users', 'carrera', {
+        type: Sequelize.STRING,
+        allowNull: true,
+      });
+    } catch (e) {
+      console.log("Columna 'carrera' ya existe, omitiendo adición.");
+    }
 
     await queryInterface.bulkInsert('Users', [
+      // === Admin/Staff ===
       {
         name: 'Administrador General',
         email: 'admin@tecsup.edu.pe',
         password: hashedPassword,
-        roleId: 1, // suponiendo que 1 = admin
+        roleId: 1, // admin
+        carrera: null,
         createdAt: new Date(),
         updatedAt: new Date()
       },
+
       {
-        name: 'Biblioteca',
+        name: 'Administrador Cubículos',
         email: 'biblioteca@tecsup.edu.pe',
         password: hashedPassword,
-        roleId: 1, // por ejemplo 2 = staff o algo similar
+        roleId: 1, // admin
+        carrera: null,
         createdAt: new Date(),
         updatedAt: new Date()
       },
+
       {
-        name: 'Redes',
+        name: 'Administrador Redes',
         email: 'redes@tecsup.edu.pe',
         password: hashedPassword,
-        roleId: 1, // mismo rol o diferente si lo prefieres
+        roleId: 1, // admin
+        carrera: null,
         createdAt: new Date(),
         updatedAt: new Date()
       },
-      // === Usuarios Normales (Estudiantes) ===
+      // ... (otros admins)
+      // === Estudiantes ===
       {
         name: 'Rojan Fernández',
         email: 'rojan.lopez@tecsup.edu.pe',
         password: hashedPassword,
         roleId: 2, // student
+        carrera: 'Redes y Comunicaciones', // <-- DATO AÑADIDO
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -44,6 +63,7 @@ module.exports = {
         email: 'maria.lopez@tecsup.edu.pe',
         password: hashedPassword,
         roleId: 2,
+        carrera: 'Diseño y Desarrollo de Software', // <-- DATO AÑADIDO
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -52,6 +72,7 @@ module.exports = {
         email: 'javier.ramos@tecsup.edu.pe',
         password: hashedPassword,
         roleId: 2,
+        carrera: 'Mecatrónica Industrial', // <-- DATO AÑADIDO
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -60,6 +81,7 @@ module.exports = {
         email: 'ana.torres@tecsup.edu.pe',
         password: hashedPassword,
         roleId: 2,
+        carrera: 'Mecatrónica Industrial', // <-- DATO AÑADIDO
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -68,6 +90,7 @@ module.exports = {
         email: 'lucia.mendoza@tecsup.edu.pe',
         password: hashedPassword,
         roleId: 2,
+        carrera: 'Aviónica y Mecánica Aeronáutica', // <-- DATO AÑADIDO
         createdAt: new Date(),
         updatedAt: new Date()
       }

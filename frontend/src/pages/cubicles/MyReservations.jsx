@@ -1,23 +1,13 @@
 import cubiclesApi from '../../api/cubiclesApi';
+import { getUser } from '../../auth/auth'; // Asegúrate de importar getUser
 
 const MisReservas = ({ reservations, setReservations }) => {
+  const userId = getUser().id;
 
-  const upcomingBookings = [
-    {
-      id: 2,
-      nombre: 'Cubículo 1',
-      fecha: '2025-11-10',
-      hora: '09:00 AM',
-      duracion: '2 horas',
-    },
-    {
-      id: 3,
-      nombre: 'Cubículo 4',
-      fecha: '2025-11-12',
-      hora: '02:00 PM',
-      duracion: '1 hora',
-    },
-  ];
+  const upcomingBookings = [ { id: 2, nombre: 'Cubículo 1', fecha: '2025-11-10', hora: '09:00 AM', duracion: '2 horas', }, { id: 3, nombre: 'Cubículo 4', fecha: '2025-11-12', hora: '02:00 PM', duracion: '1 hora', }, ];
+
+  // 🔹 Filtra solo las reservas del usuario actual
+  const userReservations = reservations.filter(r => r.userId === userId);
 
   function formatReservation(reservation) {
     const start = new Date(reservation.startTime);
@@ -43,20 +33,24 @@ const MisReservas = ({ reservations, setReservations }) => {
     };
   }
 
-  // Reserva activa: la primera del array
-  const activeBooking = reservations.length > 0 ? formatReservation(reservations[0]) : null;
+  // 🔹 Reserva activa: la primera del array filtrado
+  const activeBooking = userReservations.length > 0
+    ? formatReservation(userReservations[0])
+    : null;
 
-  const cancelResevation = async (reservationId) => {
+  // 🔹 Reservas pasadas o futuras (según lo que necesites)
+  const pastBookings = userReservations.slice(1).map(formatReservation);
+
+  const cancelReservation = async (reservationId) => {
     try {
       await cubiclesApi.cancelReservation({ reservationId });
-      
-      // Actualizamos el estado filtrando la reserva cancelada
-      const updatedReservations = reservations.filter(r => r.id !== reservationId);
+
+      const updatedReservations = userReservations.filter(r => r.id !== reservationId);
       setReservations(updatedReservations);
     } catch (error) {
       console.error("Error al cancelar:", error);
     }
-  }
+  };
 
   return (
     <>
@@ -70,7 +64,7 @@ const MisReservas = ({ reservations, setReservations }) => {
             <p className="active-date">{activeBooking.fecha}</p>
             <button
               className="btn-cancel-active"
-              onClick={() => cancelResevation(activeBooking.id)}
+              onClick={() => cancelReservation(activeBooking.id)}
             >
               Cancelar Reserva
             </button>
@@ -82,7 +76,7 @@ const MisReservas = ({ reservations, setReservations }) => {
         )}
       </div>
 
-      {/* --- Próximas Reservas --- */}
+      {/* --- Reservas anteriores --- */}
       <div className="booking-section-container">
         <h2>Mis Anteriores Reservas</h2>
         {upcomingBookings.length > 0 ? (
@@ -91,23 +85,19 @@ const MisReservas = ({ reservations, setReservations }) => {
               <div className="booking-list-item" key={booking.id}>
                 <div className="booking-item-info">
                   <h4>{booking.nombre}</h4>
-                  <p>
-                    {booking.fecha} | {booking.hora} ({booking.duracion})
-                  </p>
+                  <p>{booking.fecha} | {booking.hora}</p>
                 </div>
-                {/*<div className="booking-item-actions"><button className="btn-cancel">Cancelar</button></div>*/}
               </div>
             ))}
           </div>
         ) : (
           <div className="no-booking-message">
-            <p>No tienes reservas programadas.</p>
+            <p>No tienes reservas anteriores.</p>
           </div>
         )}
       </div>
     </>
   );
 };
-
 
 export default MisReservas;

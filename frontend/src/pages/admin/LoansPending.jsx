@@ -11,7 +11,7 @@ const pendingRequests = [
 ];
 // --- FIN DE DATOS DE EJEMPLO ---
 
-const SolicitudesPendientes = () => {
+const SolicitudesPendientes = ({getAllNotPending}) => {
   const [activeFilter, setActiveFilter] = useState("TODOS");
   const [pendingLoans, setPendingLoans] = useState([]);
   const [users, setUsers] = useState([]);
@@ -21,7 +21,7 @@ const SolicitudesPendientes = () => {
   // 🔹 Obtener todas las solicitudes pendientes
   const getPendingLoans = async () => {
     try {
-      const data = await loansApi.getPendingLoans(); // <-- tu endpoint /loans/pending
+      const data = await loansApi.getPendingLoans();
       setPendingLoans(data);
     } catch (error) {
       console.error("Error al obtener préstamos pendientes:", error);
@@ -42,12 +42,12 @@ const SolicitudesPendientes = () => {
     try {
       const loan = await loansApi.acceptLoan(id);
       await getPendingLoans();
+      await getAllNotPending();
     } catch (error) {
       console.error("Error al aceptar loan:", error);
     }
   };
 
-  // 🔹 Llamar a las APIs al cargar el componente
   useEffect(() => {
     getPendingLoans();
     getAllUsers();
@@ -111,10 +111,12 @@ const SolicitudesPendientes = () => {
                 <td>{request.alumno}</td>
                 <td>{request.cantidad}</td>
                 <td>
-                  <a href="#" className="action-link-prestamo"
+                  <a
+                    href="#"
+                    className="action-link-ingreso"
                     onClick={() => acceptLoan(request.id)}
                   >
-                    Registrar Préstamo
+                    Registrar Prestamo
                   </a>
                 </td>
               </tr>

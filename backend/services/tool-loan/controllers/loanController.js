@@ -56,39 +56,61 @@ module.exports = {
 
   async create(req, res) {
     try {
-      //const { equipmentId, startDate, endDate } = req.body;
       const { equipmentId } = req.body;
       const userId = req.user.id;
 
+      // 1️⃣ Verificar si el equipo existe
       const equipment = await Equipment.findByPk(equipmentId);
       if (!equipment) {
         return res.status(404).json({ error: 'Equipment not found' });
       }
 
+      // 2️⃣ Validar disponibilidad
       if (equipment.quantity < 1 || equipment.status !== 'available') {
         return res.status(400).json({ error: 'Equipment not available for loan' });
       }
 
+      // 3️⃣ Buscar si el usuario ya tiene un préstamo pendiente
+      const existingPendingLoan = await Loan.findOne({
+        where: {
+          userId,
+          status: 'pending',
+        },
+      });
+
+      // 4️⃣ Si tiene uno, eliminarlo antes de crear uno nuevo
+      if (existingPendingLoan) {
+        await existingPendingLoan.destroy();
+        console.log(`Préstamo pendiente anterior del usuario ${userId} eliminado.`);
+      }
+
+      // 5️⃣ Crear las fechas del nuevo préstamo
       const startDate = new Date();
-
       const endDate = new Date();
-      endDate.setDate(startDate.getDate() + 4);
+      endDate.setDate(startDate.getDate() + 4); // 4 días después
 
+      // 6️⃣ Crear el nuevo préstamo
       const loan = await Loan.create({
         equipmentId,
         userId,
         startDate,
         endDate,
-        status: 'pending'
+        status: 'pending',
       });
 
+      // 🔹 (Opcional) Actualizar cantidad si deseas restar stock
       // await equipment.update({ quantity: equipment.quantity - 1 });
 
-      res.status(201).json(loan);
+      res.status(201).json({
+        message: 'Nuevo préstamo creado exitosamente',
+        loan,
+      });
     } catch (error) {
+      console.error('Error al crear préstamo:', error);
       res.status(500).json({ error: error.message });
     }
   },
+
 
   async update(req, res) {
     try {
@@ -128,7 +150,7 @@ module.exports = {
         return res.status(400).json({ error: 'Only pending loans can be accepted' });
       }
 
-      await loan.update({ status: 'accepted' });
+      await loan.update({ status: 'loaned' });
 
       // ws publisher
       await notifyReservationAccepted({

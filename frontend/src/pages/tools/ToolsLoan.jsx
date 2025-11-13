@@ -1,42 +1,6 @@
 import { useState, useMemo } from 'react';
 import { getUser } from '../../auth/auth';
-import { useNavigate } from 'react-router';
 
-// --- DATOS DE EJEMPLO ---
-// 'disponible', 'prestado', 'no-disp'
-const FAKmasterToolList = [
-  {
-    id: 1,
-    nombre: 'Crimpadora',
-    descripcion: 'Une cables y terminales con precisión para conexiones eléctricas seguras y duraderas.',
-    status: 'disponible',
-    imagenUrl: 'https://i.imgur.com/gSrxFfW.png', // URL de imagen de ejemplo
-  },
-  {
-    id: 2,
-    nombre: 'Switch',
-    descripcion: 'Permite la interconexión de dispositivos en red LAN con alta velocidad y baja latencia.',
-    status: 'no-disp',
-    imagenUrl: 'https://i.imgur.com/gPj9tA2.png', // URL de imagen de ejemplo
-  },
-  {
-    id: 3,
-    nombre: 'Multímetro Digital',
-    descripcion: 'Mide voltaje, corriente y resistencia. Esencial para diagnósticos eléctricos.',
-    status: 'prestado',
-    imagenUrl: 'https://i.imgur.com/L8F4n8s.png', // URL de imagen de ejemplo
-  },
-  {
-    id: 4,
-    nombre: 'Set de Destornilladores',
-    descripcion: 'Juego completo para ensamblaje y desensamblaje de equipos electrónicos.',
-    status: 'disponible',
-    imagenUrl: 'https://i.imgur.com/O4hGqM6.png', // URL de imagen de ejemplo
-  },
-];
-// --- FIN DE DATOS DE EJEMPLO ---
-
-// Componente para la etiqueta de estado
 const StatusTag = ({ status }) => {
   let className = 'status-tag';
   let text = '';
@@ -61,6 +25,13 @@ const StatusTag = ({ status }) => {
       text = 'N/A';
   }
   return <span className={className}>{text}</span>;
+};
+
+const toolImages = {
+  1: '/dell.jpg',
+  2: '/epson.jpg',
+  3: '/router.jpg',
+  4: '/hdmi.jpg',
 };
 
 const ReservarHerramienta = ({ masterToolList, loanTool, masterLoanList, setActiveTab }) => {
@@ -148,9 +119,13 @@ const ReservarHerramienta = ({ masterToolList, loanTool, masterLoanList, setActi
       {/* --- Lista de Herramientas --- */}
       <div className="tool-list">
         {filteredTools.length > 0 ? (
-          filteredTools.map(tool => (
+          filteredTools.map((tool) => (
             <div className="tool-card" key={tool.id}>
-              <img src={tool.imagenUrl} alt={tool.name} className="tool-image" />
+              <img
+                src={toolImages[tool.id] || '/images/tools/default.jpg'}
+                alt={tool.name}
+                className="tool-image"
+              />
               <div className="tool-info">
                 <h3>{tool.name}</h3>
                 <p>{tool.description}</p>
@@ -165,14 +140,16 @@ const ReservarHerramienta = ({ masterToolList, loanTool, masterLoanList, setActi
                   {hasActiveLoan
                     ? 'Ya tienes un préstamo'
                     : tool.status !== 'available'
-                      ? 'No disponible'
-                      : 'Reservar'}
+                    ? 'No disponible'
+                    : 'Reservar'}
                 </button>
               </div>
             </div>
           ))
         ) : (
-          <p className="no-results-message">No se encontraron herramientas que coincidan con su búsqueda.</p>
+          <p className="no-results-message">
+            No se encontraron herramientas que coincidan con su búsqueda.
+          </p>
         )}
       </div>
     </div>

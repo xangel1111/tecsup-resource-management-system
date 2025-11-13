@@ -18,6 +18,9 @@ module.exports = {
       password: {
         type: Sequelize.STRING
       },
+      carrera: {
+        type: Sequelize.STRING
+      },
       roleId: {
         type: Sequelize.INTEGER
       },

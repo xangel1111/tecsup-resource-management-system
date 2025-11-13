@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './AdminLayout.css';
 import tecsupLogo from '../../assets/tecsup-logo.png';
 
@@ -11,9 +11,15 @@ import HistorialPrestamos from './LoansHistory';
 // IMPORTA EL NUEVO COMPONENTE
 import CrudHerramientas from './ToolCrud';
 
+import DashBoardReservas from './DashBoardReservas';
+
 // Importa íconos
 import { FaBell, FaCog, FaSignOutAlt, FaSearch, FaTools } from 'react-icons/fa';
 import { getUser, logout } from '../../auth/auth';
+import usersApi from '../../api/usersApi';
+import cubiclesApi from '../../api/cubiclesApi';
+import loansApi from '../../api/loansApi';
+import DashBoardPrestamos from './DashBoardPrestamos';
 
 // Logo
 //const tecsupLogoUrl = 'https://www.tecsup.edu.pe/sites/all/themes/tecsup/logo.png';
@@ -21,6 +27,41 @@ const tecsupLogoUrl = tecsupLogo;
 
 const AdminLayout = () => {
   const [activeView, setActiveView] = useState('reservasPendientes'); 
+
+
+  const [users, setUsers] = useState();
+  const [reservations, setReservations] = useState();
+
+  const [tools, setTools] = useState();
+  const [loans, setLoans] = useState();
+
+  const getAllUsers = async () => {
+    const data = await usersApi.getUsers();
+    setUsers(data);
+  };
+
+  const getAllReservations = async () => {
+    const data = (await cubiclesApi.getAllNotPending());
+    setReservations(data)
+  };
+
+  const getAllEquipments = async () => {
+    const data = (await loansApi.getAllTools());
+    setTools(data)
+  };
+
+  const getAllLoans = async () => {
+    const data = (await loansApi.getNotPendingLoans());
+    console.log(data)
+    setLoans(data)
+  };
+
+  useEffect(() => {
+    getAllUsers();
+    getAllReservations();
+    getAllEquipments();
+    getAllLoans();
+  },[]);
 
   const username = getUser().email;
 
@@ -45,6 +86,12 @@ const AdminLayout = () => {
           >
             Historial de Reservas
           </button>
+          <button
+            className={`sidebar-link ${activeView === 'dashboardReservas' ? 'active' : ''}`}
+            onClick={() => setActiveView('dashboardReservas')}
+          >
+            Dashboard
+          </button>
         </div>
       )}
 
@@ -63,6 +110,12 @@ const AdminLayout = () => {
             onClick={() => setActiveView('historialPrestamos')}
           >
             Historial de Préstamos
+          </button>
+          <button
+            className={`sidebar-link ${activeView === 'dashboardPrestamos' ? 'active' : ''}`}
+            onClick={() => setActiveView('dashboardPrestamos')}
+          >
+            Dashboard
           </button>
           <button
             className={`sidebar-link ${activeView === 'crudHerramientas' ? 'active' : ''}`}
@@ -108,13 +161,28 @@ const AdminLayout = () => {
   const renderActiveView = () => {
     switch (activeView) {
       case 'reservasPendientes':
-        return <ReservasPendientes />;
+        return <ReservasPendientes 
+          getAllNotPending={getAllReservations}
+        />;
       case 'historialReservas':
         return <HistorialReservas />;
+      case 'dashboardReservas':
+        return <DashBoardReservas
+          reservations={reservations}
+          users={users}
+          />;
       case 'solicitudesPendientes':
-        return <SolicitudesPendientes />;
+        return <SolicitudesPendientes
+          getAllNotPending={getAllLoans}
+        />;
       case 'historialPrestamos':
         return <HistorialPrestamos />;
+      case 'dashboardPrestamos':
+        return <DashBoardPrestamos
+          equipments={tools}
+          users={users}
+          loans={loans}
+          />;
       case 'crudHerramientas': // --- NUEVO CASE ---
         return <CrudHerramientas />;
       default:
